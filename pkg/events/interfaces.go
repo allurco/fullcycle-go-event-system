@@ -1,6 +1,9 @@
 package events
 
-import "time"
+import (
+	"sync"
+	"time"
+)
 
 type EventInterface interface {
 	GetName() string
@@ -9,13 +12,13 @@ type EventInterface interface {
 }
 
 type EventHanderInterface interface {
-	Handle(event EventInterface)
+	Handle(event EventInterface, wg *sync.WaitGroup)
 }
 
 type EventDispatcherInterface interface {
 	Register(name string, handle EventHanderInterface) error
 	Dispach(event EventInterface) error
 	Remove(name string, handle EventHanderInterface) error
-	Has(name string) bool
+	Has(name string, handle EventHanderInterface) bool
 	Clear() error
 }
